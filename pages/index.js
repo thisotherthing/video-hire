@@ -1,21 +1,24 @@
 import React from "react";
 
-export default class Index extends React.Component {
+import FaceCover from "../components/faceCover";
 
+export default class Index extends React.Component {
   componentDidMount() {
     // TODO subscribe to socket.io messages
 
     navigator.mediaDevices.getUserMedia({
       audio: true,
       video: {
-        width: 1280,
-        height: 720,
+        width: 400,
+        height: 300,
       },
     })
       .then((mediaStream) => {
         this.videoRef.srcObject = mediaStream;
         this.videoRef.onloadedmetadata = () => {
           this.videoRef.play();
+
+          this.faceCoverRef.setup(this.videoRef);
 
           // TODO detect face with clmtracker, and to face mask
 
@@ -41,10 +44,13 @@ export default class Index extends React.Component {
     return (
       <div>
         <video ref={(ref) => {this.videoRef = ref; }} />
+        <FaceCover
+          ref={(ref) => {this.faceCoverRef = ref; }}
+        />
         <style jsx>{`
           video {
-            width: 100vw;
-            height: 100vh;
+            width: 400px;
+            height: 300px;
           }
         `}
         </style>
