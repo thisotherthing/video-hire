@@ -1,22 +1,37 @@
-const express = require("express");
-const next = require("next");
 
-const port = parseInt(process.env.PORT, 10) || 3000;
-const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev });
-const handle = app.getRequestHandler();
+const app = require('express')()
+const server = require('http').Server(app)
+const io = require('socket.io')(server)
+const next = require('next')
 
-// TODO setup sockets for communication https://github.com/sergiodxa/next-socket.io
+const dev = process.env.NODE_ENV !== 'production'
+const nextApp = next({ dev })
+const nextHandler = nextApp.getRequestHandler()
 
-app.prepare().then(() => {
-  const server = express()
+// fake DB
+const messages = []
 
-  server.get("*", (req, res) => {
-    return handle(req, res);
+// socket.io server
+io.on('connection', socket => {
+  // console.log("connection", socket);
+  socket.emit('message', "from server");
+
+  socket.on('message', (data) => {
+    messages.push(data)
+  })
+})
+
+nextApp.prepare().then(() => {
+  app.get('/messages', (req, res) => {
+    res.json(messages)
   })
 
-  server.listen(port, err => {
-    if (err) throw err;
-    console.log(`> Ready on http://localhost:${port}`);
-  });
-});
+  app.get('*', (req, res) => {
+    return nextHandler(req, res)
+  })
+
+  server.listen(3000, (err) => {
+    if (err) throw err
+    console.log('> Ready on http://localhost:3000')
+  })
+})

@@ -37,14 +37,10 @@ export default class faceAnimation extends React.Component {
 
     render() {
         return (
-            <div style={{
-                background: "red",
-            }}>
 
             <canvas
                 ref={(ref) => (this.canvasRef = ref)}
             />
-            </div>
 
         )
     }
