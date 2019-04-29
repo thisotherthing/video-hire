@@ -9,8 +9,8 @@ export default class Index extends React.Component {
     navigator.mediaDevices.getUserMedia({
       audio: true,
       video: {
-        width: 400,
-        height: 300,
+        width: 640,
+        height: 480,
       },
     })
       .then((mediaStream) => {
@@ -43,14 +43,18 @@ export default class Index extends React.Component {
   render() {
     return (
       <div>
-        <video ref={(ref) => {this.videoRef = ref; }} />
+        <video
+          width="640"
+          height="480"
+          ref={(ref) => {this.videoRef = ref; }}
+        />
         <FaceCover
           ref={(ref) => {this.faceCoverRef = ref; }}
         />
         <style jsx>{`
           video {
-            width: 400px;
-            height: 300px;
+            width: 640px;
+            height: 480px;
           }
         `}
         </style>
