@@ -16,7 +16,8 @@ export default class Index extends React.Component {
 
   componentDidMount() {
     // TODO subscribe to socket.io messages
-    this.socket = io('localhost:3000');
+    // this.socket = io('localhost:3000');
+    this.socket = io("wss://match-without-limits.herokuapp.com/");
     this.socket.on('message', this.handleMessage)
     this.socket.emit('message', "from browser");
 
