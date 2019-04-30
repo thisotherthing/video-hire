@@ -14,6 +14,9 @@ const videoHeight = 240;
 
 const faceScale = 3.0;
 
+const shiftX = -1.0;
+const shiftY = -0.5;
+
 /* global clm */
 
 const lerp = (a, b, t) => {
@@ -189,39 +192,39 @@ export default class Index extends React.Component {
         0.5
       );
 
-      this.uniforms.faceBaseCenter.value[0] = eyeCenterX / videoWidth;
-      this.uniforms.faceBaseCenter.value[1] = eyeCenterY / videoHeight;
+      this.uniforms.faceBaseCenter.value[0] = eyeCenterX / videoWidth + shiftX;
+      this.uniforms.faceBaseCenter.value[1] = eyeCenterY / videoHeight + shiftY;
 
 
-      this.uniforms.leftEyeCenter.value[0] = this.featurePositions[27][0] / videoWidth;
-      this.uniforms.leftEyeCenter.value[1] = this.featurePositions[27][1] / videoHeight;
+      this.uniforms.leftEyeCenter.value[0] = this.featurePositions[27][0] / videoWidth + shiftX;
+      this.uniforms.leftEyeCenter.value[1] = this.featurePositions[27][1] / videoHeight + shiftY;
 
-      this.uniforms.leftEyebrow0Center.value[0] = this.featurePositions[22][0] / videoWidth;
-      this.uniforms.leftEyebrow0Center.value[1] = this.featurePositions[22][1] / videoHeight;
-      this.uniforms.leftEyebrow1Center.value[0] = this.featurePositions[20][0] / videoWidth;
-      this.uniforms.leftEyebrow1Center.value[1] = this.featurePositions[20][1] / videoHeight;
-      this.uniforms.leftEyebrow2Center.value[0] = this.featurePositions[19][0] / videoWidth;
-      this.uniforms.leftEyebrow2Center.value[1] = this.featurePositions[19][1] / videoHeight;
+      this.uniforms.leftEyebrow0Center.value[0] = this.featurePositions[22][0] / videoWidth + shiftX;
+      this.uniforms.leftEyebrow0Center.value[1] = this.featurePositions[22][1] / videoHeight + shiftY;
+      this.uniforms.leftEyebrow1Center.value[0] = this.featurePositions[20][0] / videoWidth + shiftX;
+      this.uniforms.leftEyebrow1Center.value[1] = this.featurePositions[20][1] / videoHeight + shiftY;
+      this.uniforms.leftEyebrow2Center.value[0] = this.featurePositions[19][0] / videoWidth + shiftX;
+      this.uniforms.leftEyebrow2Center.value[1] = this.featurePositions[19][1] / videoHeight + shiftY;
 
 
-      this.uniforms.rightEyeCenter.value[0] = this.featurePositions[32][0] / videoWidth;
-      this.uniforms.rightEyeCenter.value[1] = this.featurePositions[32][1] / videoHeight;
-      this.uniforms.rightEyebrow0Center.value[0] = this.featurePositions[18][0] / videoWidth;
-      this.uniforms.rightEyebrow0Center.value[1] = this.featurePositions[18][1] / videoHeight;
-      this.uniforms.rightEyebrow1Center.value[0] = this.featurePositions[16][0] / videoWidth;
-      this.uniforms.rightEyebrow1Center.value[1] = this.featurePositions[16][1] / videoHeight;
-      this.uniforms.rightEyebrow2Center.value[0] = this.featurePositions[15][0] / videoWidth;
-      this.uniforms.rightEyebrow2Center.value[1] = this.featurePositions[15][1] / videoHeight;
+      this.uniforms.rightEyeCenter.value[0] = this.featurePositions[32][0] / videoWidth + shiftX;
+      this.uniforms.rightEyeCenter.value[1] = this.featurePositions[32][1] / videoHeight + shiftY;
+      this.uniforms.rightEyebrow0Center.value[0] = this.featurePositions[18][0] / videoWidth + shiftX;
+      this.uniforms.rightEyebrow0Center.value[1] = this.featurePositions[18][1] / videoHeight + shiftY;
+      this.uniforms.rightEyebrow1Center.value[0] = this.featurePositions[16][0] / videoWidth + shiftX;
+      this.uniforms.rightEyebrow1Center.value[1] = this.featurePositions[16][1] / videoHeight + shiftY;
+      this.uniforms.rightEyebrow2Center.value[0] = this.featurePositions[15][0] / videoWidth + shiftX;
+      this.uniforms.rightEyebrow2Center.value[1] = this.featurePositions[15][1] / videoHeight + shiftY;
 
-      this.uniforms.mouthLeft.value[0] = this.featurePositions[44][0] / videoWidth;
-      this.uniforms.mouthLeft.value[1] = this.featurePositions[44][1] / videoHeight;
-      this.uniforms.mouthCenter.value[0] = this.featurePositions[60][0] / videoWidth;
-      this.uniforms.mouthCenter.value[1] = this.featurePositions[60][1] / videoHeight;
-      this.uniforms.mouthRight.value[0] = this.featurePositions[50][0] / videoWidth;
-      this.uniforms.mouthRight.value[1] = this.featurePositions[50][1] / videoHeight;
+      this.uniforms.mouthLeft.value[0] = this.featurePositions[44][0] / videoWidth + shiftX;
+      this.uniforms.mouthLeft.value[1] = this.featurePositions[44][1] / videoHeight + shiftY;
+      this.uniforms.mouthCenter.value[0] = this.featurePositions[60][0] / videoWidth + shiftX;
+      this.uniforms.mouthCenter.value[1] = this.featurePositions[60][1] / videoHeight + shiftY;
+      this.uniforms.mouthRight.value[0] = this.featurePositions[50][0] / videoWidth + shiftX;
+      this.uniforms.mouthRight.value[1] = this.featurePositions[50][1] / videoHeight + shiftY;
 
-      this.uniforms.mouthBottom.value[0] = this.featurePositions[53][0] / videoWidth;
-      this.uniforms.mouthBottom.value[1] = this.featurePositions[53][1] / videoHeight;
+      this.uniforms.mouthBottom.value[0] = this.featurePositions[53][0] / videoWidth + shiftX;
+      this.uniforms.mouthBottom.value[1] = this.featurePositions[53][1] / videoHeight + shiftY;
 
       setOffsetVector(
         this.uniforms.faceBaseToRight.value,
