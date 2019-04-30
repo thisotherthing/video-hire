@@ -1,37 +1,40 @@
 
-const app = require('express')()
-const server = require('http').Server(app)
-const io = require('socket.io')(server)
-const next = require('next')
+const app = require("express")();
+const server = require("http").Server(app);
+const io = require("socket.io")(server);
+const next = require("next");
 
-const dev = process.env.NODE_ENV !== 'production'
-const nextApp = next({ dev })
-const nextHandler = nextApp.getRequestHandler()
+const dev = process.env.NODE_ENV !== "production";
+const nextApp = next({ dev });
+const nextHandler = nextApp.getRequestHandler();
+
+const port = process.env.PORT || 3000;
 
 // fake DB
 const messages = []
 
 // socket.io server
-io.on('connection', socket => {
+io.on("connection", socket => {
   // console.log("connection", socket);
-  socket.emit('message', "from server");
+  socket.emit("message", "from server");
 
-  socket.on('message', (data) => {
+  socket.on("message", (data) => {
     messages.push(data)
   })
 })
 
 nextApp.prepare().then(() => {
-  app.get('/messages', (req, res) => {
+  app.get("/messages", (req, res) => {
     res.json(messages)
   })
 
-  app.get('*', (req, res) => {
+  app.get("*", (req, res) => {
     return nextHandler(req, res)
   })
 
-  server.listen(3000, (err) => {
-    if (err) throw err
-    console.log('> Ready on http://localhost:3000')
+  server.listen(port, (err) => {
+    if (err) throw err;
+
+    console.log(`Listening on http://localhost:${port}`);
   })
-})
+});

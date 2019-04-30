@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "node server.js",
     "build": "next build",
-    "start": "cross-env NODE_ENV=production node server.js"
+    "startOther": "cross-env NODE_ENV=production node server.js",
+    "start": "NODE_ENV=production node server.js -p $PORT"
   },
   "dependencies": {
     "express": "^4.14.0",
