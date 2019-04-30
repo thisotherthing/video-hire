@@ -1,6 +1,68 @@
 import * as React from "react";
+import {
+  PerspectiveCamera,
+  Scene,
+  WebGLRenderer,
+  Clock,
+  TextureLoader,
+} from "three";
+
+import addFaceBaseCover from "./getFaceBaseCover";
+
+const videoWidth = 640;
+const videoHeight = 480;
+
+const faceScale = 3.0;
 
 /* global clm */
+
+const lerp = (a, b, t) => {
+  return a + ((b - a) * t);
+};
+
+const setOffsetVector = (
+  target,
+  point0,
+  point1,
+) => {
+  target[0] =
+    (
+      point0[0]
+      - point1[0]
+    ) / videoWidth * faceScale;
+
+  target[1] =
+    (
+      point0[1]
+      - point1[1]
+    ) / videoHeight * faceScale;
+};
+const setPoint = (
+  target,
+  point,
+) => {
+  target[0] = point[0] / videoWidth * faceScale;
+  target[1] = point[1] / videoHeight * faceScale;
+};
+
+const vecLength = (vec) => {
+  return Math.sqrt(
+    vec[0] * vec[0] +
+    vec[1] * vec[1]
+  );
+};
+
+const normalizeLengthTo = (
+  srcVec,
+  targetVec,
+) => {
+  const srcLength = vecLength(srcVec);
+  const targetLength = vecLength(targetVec);
+
+  const scaler = srcLength / targetLength;
+  targetVec[0] *= scaler;
+  targetVec[1] *= scaler;
+};
 
 export default class Index extends React.Component {
   setup = (videoRef) => {
@@ -13,6 +75,72 @@ export default class Index extends React.Component {
 
     this.debugCanvasCtx = this.debugCanvasRef.getContext("2d");
 
+    this.clock = new Clock();
+    this.clock.start();
+
+    this.renderer = new WebGLRenderer({
+      canvas: this.canvasRef,
+      // antialias: true,
+      alpha: true,
+    });
+    this.renderer.setPixelRatio(window.devicePixelRatio || 1.0);
+    this.renderer.setClearColor(0xffffff, 0.0);
+
+    this.scene = new Scene();
+
+    const textureLoader = new TextureLoader();
+
+    this.uniforms = {
+      time: {type: "f", value: 0.0},
+      aspectRatio: {type: "f", value: 0.0},
+      screenParams: {
+        type: "4fv",
+        value: [1.0, 1.0, 0.0, 0.0],
+      },
+
+      faceBaseCenter: {
+        type: "3fv",
+        value: [0.0, 0.0, -2.0],
+      },
+      leftEyeCenter: {
+        type: "3fv",
+        value: [-0.1, 0.0, -2.0],
+      },
+      rightEyeCenter: {
+        type: "3fv",
+        value: [0.1, 0.0, -2.0],
+      },
+      faceBaseToRight: {
+        type: "3fv",
+        value: [0.2, 0.0, 0.0],
+      },
+      faceBaseToBottom: {
+        type: "3fv",
+        value: [0.0, 0.4, 0.0],
+      },
+      faceBaseToBottomSquare: {
+        type: "3fv",
+        value: [0.0, 0.2, 0.0],
+      },
+
+      faceBaseMap: {type: "t", value: textureLoader.load("/static/head.png")},
+      faceEarMap: {type: "t", value: textureLoader.load("/static/head_ears.png")},
+      faceEyeMap: {type: "t", value: textureLoader.load("/static/eye.png")},
+    };
+
+    this.camera = new PerspectiveCamera(
+      50,
+      1.0,
+      1.0,
+      100.0,
+    );
+    this.camera.position.z = 2.5;
+
+    addFaceBaseCover(
+      this.uniforms,
+      this.scene,
+    );
+
     window.addEventListener("resize", this.onResize);
     this.onResize();
 
@@ -20,12 +148,75 @@ export default class Index extends React.Component {
   }
 
   renderloop = () => {
+    const delta = Math.min(1.0 / 20.0, this.clock.getDelta());
+    this.uniforms.time.value += delta;
+    this.uniforms.time.value %= 1000.0;
+
     this.featurePositions = this.faceTracker.getCurrentPosition();
 
     this.debugCanvasCtx.clearRect(0, 0, this.debugCanvasRef.width, this.debugCanvasRef.height);
 
+    this.renderer.render(this.scene, this.camera);
+
     if (this.featurePositions) {
       this.faceTracker.draw(this.debugCanvasRef);
+
+      const eyeCenterX = lerp(
+        this.featurePositions[27][0],
+        this.featurePositions[32][0],
+        0.5
+      );
+      const eyeCenterY = lerp(
+        this.featurePositions[27][1],
+        this.featurePositions[32][1],
+        0.5
+      );
+
+      this.uniforms.faceBaseCenter.value[0] = eyeCenterX / videoWidth;
+      this.uniforms.faceBaseCenter.value[1] = eyeCenterY / videoHeight;
+
+
+      this.uniforms.leftEyeCenter.value[0] = this.featurePositions[27][0] / videoWidth;
+      this.uniforms.leftEyeCenter.value[1] = this.featurePositions[27][1] / videoHeight;
+      this.uniforms.rightEyeCenter.value[0] = this.featurePositions[32][0] / videoWidth;
+      this.uniforms.rightEyeCenter.value[1] = this.featurePositions[32][1] / videoHeight;
+
+      // setPoint(
+      //   this.uniforms.leftEyeCenter.value,
+      //   this.featurePositions[27],
+      // )
+      // setOffsetVector(
+      //   this.uniforms.leftEyeCenter.value,
+      //   [eyeCenterX, eyeCenterY],
+      //   this.featurePositions[27],
+      // );
+      // setOffsetVector(
+      //   this.uniforms.rightEyeCenter.value,
+      //   [eyeCenterX, eyeCenterY],
+      //   this.featurePositions[32],
+      // );
+
+      setOffsetVector(
+        this.uniforms.faceBaseToRight.value,
+        this.featurePositions[27],
+        this.featurePositions[32],
+      );
+
+      setOffsetVector(
+        this.uniforms.faceBaseToBottom.value,
+        this.featurePositions[7],
+        [eyeCenterX, eyeCenterY],
+      );
+      this.uniforms.faceBaseToBottom.value[0] *= 0.5;
+      this.uniforms.faceBaseToBottom.value[1] *= 0.5;
+
+      this.uniforms.faceBaseToBottomSquare.value[0] = this.uniforms.faceBaseToBottom.value[0];
+      this.uniforms.faceBaseToBottomSquare.value[1] = this.uniforms.faceBaseToBottom.value[1];
+
+      normalizeLengthTo(
+        this.uniforms.faceBaseToRight.value,
+        this.uniforms.faceBaseToBottomSquare.value,
+      );
     }
 
     this.framerequest = requestAnimationFrame(this.renderloop);
@@ -38,14 +229,44 @@ export default class Index extends React.Component {
     this.faceTracker.stop();
     this.faceTracker.reset();
     this.faceTracker.start(this.videoRef);
+
+
+    this.rect = this.containerRef.getBoundingClientRect();
+
+    this.windowWidth = this.rect.width;
+    this.windowHeight = this.rect.height;
+
+    this.renderer.setSize(this.windowWidth, this.windowHeight);
+
+    this.camera.aspect = this.windowWidth / this.windowHeight;
+    this.camera.updateProjectionMatrix();
+
+    this.uniforms.aspectRatio.value = this.windowWidth / this.windowHeight;
+
+    this.uniforms.screenParams.value[0] = this.windowWidth;
+    this.uniforms.screenParams.value[1] = this.windowHeight;
+    this.uniforms.screenParams.value[2] = 1.0 / this.windowWidth;
+    this.uniforms.screenParams.value[3] = 1.0 / this.windowHeight;
   }
 
   render() {
     return (
-      <div>
+      <div
+        className="container"
+        ref={(ref) => {this.containerRef = ref; }}
+      >
         <canvas ref={(ref) => {this.debugCanvasRef = ref; }} />
         <canvas ref={(ref) => {this.canvasRef = ref; }} />
         <style jsx>{`
+          .container {
+            width: 100vw;
+            height: 100vh;
+
+            position: absolute;
+            top: 0;
+            left: 0;
+          }
+
           canvas {
             position: absolute;
             left: 0;
