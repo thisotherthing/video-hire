@@ -6,20 +6,22 @@ export default class Index extends React.Component {
   constructor() {
     super()
     this.state = {
+      showDebug: false,
       messages: 'ABC1243dsjhfksdhf'
     }
   }
   handleMessage = (e) => {
     console.log(e);
   }
-  
 
   componentDidMount() {
     // TODO subscribe to socket.io messages
     // this.socket = io('localhost:3000');
     this.socket = io("wss://match-without-limits.herokuapp.com/");
-    this.socket.on('message', this.handleMessage)
+    this.socket.on('message', this.handleMessage);
     this.socket.emit('message', "from browser");
+
+    window.addEventListener("keydown", this.onKeyboardDown);
 
     navigator.mediaDevices.getUserMedia({
       audio: true,
@@ -55,9 +57,25 @@ export default class Index extends React.Component {
       });
   }
 
+  onKeyboardDown = (e) => {
+    if (e.key === "d") {
+      this.setState({
+        showDebug: !this.state.showDebug,
+      });
+    }
+  }
+
   componentWillUnmount() {
-    this.socket.off('message', this.handleMessage)
-    this.socket.close()
+    this.socket.off('message', this.handleMessage);
+    this.socket.close();
+
+    window.removeEventListener("keydown", this.onKeyboardDown);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.showDebug !== this.state.showDebug) {
+      this.faceCoverRef.toggleDebug(this.state.showDebug);
+    }
   }
 
   render() {
@@ -68,8 +86,12 @@ export default class Index extends React.Component {
           width="640"
           height="480"
           ref={(ref) => {this.videoRef = ref; }}
+          style={{
+            opacity: this.state.showDebug ? 1.0 : 0.001,
+          }}
         />
         <FaceCover
+          showDebug={this.state.showDebug}
           ref={(ref) => {this.faceCoverRef = ref; }}
         />
         <style jsx>{`

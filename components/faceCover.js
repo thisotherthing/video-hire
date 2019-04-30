@@ -9,8 +9,8 @@ import {
 
 import addFaceBaseCover from "./getFaceBaseCover";
 
-const videoWidth = 640;
-const videoHeight = 480;
+const videoWidth = 320;
+const videoHeight = 240;
 
 const faceScale = 3.0;
 
@@ -160,6 +160,10 @@ export default class Index extends React.Component {
     this.renderloop();
   }
 
+  toggleDebug(showDebug) {
+    this.debugCanvasRef.style.opacity = showDebug ? 1.0 : 0.001;
+  }
+
   renderloop = () => {
     const delta = Math.min(1.0 / 20.0, this.clock.getDelta());
     this.uniforms.time.value += delta;
@@ -278,7 +282,12 @@ export default class Index extends React.Component {
         className="container"
         ref={(ref) => {this.containerRef = ref; }}
       >
-        <canvas ref={(ref) => {this.debugCanvasRef = ref; }} />
+        <canvas
+          ref={(ref) => {this.debugCanvasRef = ref; }}
+          style={{
+            opacity: this.props.showDebug ? 1.0 : 0.0001,
+          }}
+        />
         <canvas ref={(ref) => {this.canvasRef = ref; }} />
         <style jsx>{`
           .container {
