@@ -42,6 +42,8 @@ void main() {
     mvPosition.xyz += faceBaseCenter;
   #endif
 
+  mvPosition.y = -mvPosition.y;
+
   mvPosition = modelViewMatrix * mvPosition;
   mvPosition = projectionMatrix * mvPosition;
 

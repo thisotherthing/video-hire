@@ -106,10 +106,23 @@ export default class Index extends React.Component {
         type: "3fv",
         value: [-0.1, 0.0, -2.0],
       },
+      leftEyebrow0Center: {type: "3fv", value: [-0.1, 0.0, -2.0]},
+      leftEyebrow1Center: {type: "3fv", value: [-0.1, 0.0, -2.0]},
+      leftEyebrow2Center: {type: "3fv", value: [-0.1, 0.0, -2.0]},
+
       rightEyeCenter: {
         type: "3fv",
         value: [0.1, 0.0, -2.0],
       },
+      rightEyebrow0Center: {type: "3fv", value: [-0.1, 0.0, -2.0]},
+      rightEyebrow1Center: {type: "3fv", value: [-0.1, 0.0, -2.0]},
+      rightEyebrow2Center: {type: "3fv", value: [-0.1, 0.0, -2.0]},
+
+      mouthLeft: {type: "3fv", value: [-0.1, 0.2, -2.0]},
+      mouthCenter: {type: "3fv", value: [0.0, 0.2, -2.0]},
+      mouthRight: {type: "3fv", value: [0.1, 0.2, -2.0]},
+      mouthBottom: {type: "3fv", value: [0.0, 0.3, -2.0]},
+
       faceBaseToRight: {
         type: "3fv",
         value: [0.2, 0.0, 0.0],
@@ -178,23 +191,33 @@ export default class Index extends React.Component {
 
       this.uniforms.leftEyeCenter.value[0] = this.featurePositions[27][0] / videoWidth;
       this.uniforms.leftEyeCenter.value[1] = this.featurePositions[27][1] / videoHeight;
+
+      this.uniforms.leftEyebrow0Center.value[0] = this.featurePositions[22][0] / videoWidth;
+      this.uniforms.leftEyebrow0Center.value[1] = this.featurePositions[22][1] / videoHeight;
+      this.uniforms.leftEyebrow1Center.value[0] = this.featurePositions[20][0] / videoWidth;
+      this.uniforms.leftEyebrow1Center.value[1] = this.featurePositions[20][1] / videoHeight;
+      this.uniforms.leftEyebrow2Center.value[0] = this.featurePositions[19][0] / videoWidth;
+      this.uniforms.leftEyebrow2Center.value[1] = this.featurePositions[19][1] / videoHeight;
+
+
       this.uniforms.rightEyeCenter.value[0] = this.featurePositions[32][0] / videoWidth;
       this.uniforms.rightEyeCenter.value[1] = this.featurePositions[32][1] / videoHeight;
+      this.uniforms.rightEyebrow0Center.value[0] = this.featurePositions[18][0] / videoWidth;
+      this.uniforms.rightEyebrow0Center.value[1] = this.featurePositions[18][1] / videoHeight;
+      this.uniforms.rightEyebrow1Center.value[0] = this.featurePositions[16][0] / videoWidth;
+      this.uniforms.rightEyebrow1Center.value[1] = this.featurePositions[16][1] / videoHeight;
+      this.uniforms.rightEyebrow2Center.value[0] = this.featurePositions[15][0] / videoWidth;
+      this.uniforms.rightEyebrow2Center.value[1] = this.featurePositions[15][1] / videoHeight;
 
-      // setPoint(
-      //   this.uniforms.leftEyeCenter.value,
-      //   this.featurePositions[27],
-      // )
-      // setOffsetVector(
-      //   this.uniforms.leftEyeCenter.value,
-      //   [eyeCenterX, eyeCenterY],
-      //   this.featurePositions[27],
-      // );
-      // setOffsetVector(
-      //   this.uniforms.rightEyeCenter.value,
-      //   [eyeCenterX, eyeCenterY],
-      //   this.featurePositions[32],
-      // );
+      this.uniforms.mouthLeft.value[0] = this.featurePositions[44][0] / videoWidth;
+      this.uniforms.mouthLeft.value[1] = this.featurePositions[44][1] / videoHeight;
+      this.uniforms.mouthCenter.value[0] = this.featurePositions[60][0] / videoWidth;
+      this.uniforms.mouthCenter.value[1] = this.featurePositions[60][1] / videoHeight;
+      this.uniforms.mouthRight.value[0] = this.featurePositions[50][0] / videoWidth;
+      this.uniforms.mouthRight.value[1] = this.featurePositions[50][1] / videoHeight;
+
+      this.uniforms.mouthBottom.value[0] = this.featurePositions[53][0] / videoWidth;
+      this.uniforms.mouthBottom.value[1] = this.featurePositions[53][1] / videoHeight;
 
       setOffsetVector(
         this.uniforms.faceBaseToRight.value,
@@ -204,8 +227,8 @@ export default class Index extends React.Component {
 
       setOffsetVector(
         this.uniforms.faceBaseToBottom.value,
-        this.featurePositions[7],
         [eyeCenterX, eyeCenterY],
+        this.featurePositions[7],
       );
       this.uniforms.faceBaseToBottom.value[0] *= 0.5;
       this.uniforms.faceBaseToBottom.value[1] *= 0.5;
