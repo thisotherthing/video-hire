@@ -218,13 +218,13 @@ export default class Index extends React.Component {
 
       this.uniforms.mouthLeft.value[0] = this.featurePositions[44][0] / videoWidth + shiftX;
       this.uniforms.mouthLeft.value[1] = this.featurePositions[44][1] / videoHeight + shiftY;
-      this.uniforms.mouthCenter.value[0] = this.featurePositions[60][0] / videoWidth + shiftX;
-      this.uniforms.mouthCenter.value[1] = this.featurePositions[60][1] / videoHeight + shiftY;
+      this.uniforms.mouthCenter.value[0] = this.featurePositions[57][0] / videoWidth + shiftX;
+      this.uniforms.mouthCenter.value[1] = this.featurePositions[57][1] / videoHeight + shiftY;
       this.uniforms.mouthRight.value[0] = this.featurePositions[50][0] / videoWidth + shiftX;
       this.uniforms.mouthRight.value[1] = this.featurePositions[50][1] / videoHeight + shiftY;
 
-      this.uniforms.mouthBottom.value[0] = this.featurePositions[53][0] / videoWidth + shiftX;
-      this.uniforms.mouthBottom.value[1] = this.featurePositions[53][1] / videoHeight + shiftY;
+      this.uniforms.mouthBottom.value[0] = this.featurePositions[60][0] / videoWidth + shiftX;
+      this.uniforms.mouthBottom.value[1] = this.featurePositions[60][1] / videoHeight + shiftY;
 
       setOffsetVector(
         this.uniforms.faceBaseToRight.value,
