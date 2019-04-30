@@ -1,10 +1,24 @@
 import React from "react";
-
+import io from 'socket.io-client';
 import FaceCover from "../components/faceCover";
 
 export default class Index extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      messages: 'ABC1243dsjhfksdhf'
+    }
+  }
+  handleMessage = (e) => {
+    console.log(e);
+  }
+  
+
   componentDidMount() {
     // TODO subscribe to socket.io messages
+    this.socket = io('localhost:3000');
+    this.socket.on('message', this.handleMessage)
+    this.socket.emit('message', "from browser");
 
     navigator.mediaDevices.getUserMedia({
       audio: true,
@@ -40,9 +54,15 @@ export default class Index extends React.Component {
       });
   }
 
+  componentWillUnmount() {
+    this.socket.off('message', this.handleMessage)
+    this.socket.close()
+  }
+
   render() {
     return (
       <div>
+        {this.state.messages}
         <video
           width="640"
           height="480"
