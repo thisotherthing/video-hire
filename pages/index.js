@@ -81,7 +81,6 @@ export default class Index extends React.Component {
   render() {
     return (
       <div>
-        {this.state.messages}
         <video
           width="640"
           height="480"
