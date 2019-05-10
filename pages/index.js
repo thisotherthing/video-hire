@@ -1,13 +1,14 @@
 import React from "react";
 import io from 'socket.io-client';
 import FaceCover from "../components/faceCover";
+import VoiceCover from "../components/voiceCover";
 
 export default class Index extends React.Component {
   constructor() {
     super()
     this.state = {
       showDebug: false,
-      messages: 'MatchWithoutLimits'
+      // messages: 'MatchWithoutLimits',
     }
   }
   handleMessage = (e) => {
@@ -16,10 +17,10 @@ export default class Index extends React.Component {
 
   componentDidMount() {
     // TODO subscribe to socket.io messages
-    // this.socket = io('localhost:3000');
-    this.socket = io("wss://match-without-limits.herokuapp.com/");
-    this.socket.on('message', this.handleMessage);
-    this.socket.emit('message', "from browser");
+    this.socket = io("localhost:3000");
+    // this.socket = io("wss://match-without-limits.herokuapp.com/");
+    this.socket.on("message", this.handleMessage);
+    this.socket.emit("message", "from browser");
 
     window.addEventListener("keydown", this.onKeyboardDown);
 
@@ -34,22 +35,20 @@ export default class Index extends React.Component {
         this.videoRef.srcObject = mediaStream;
         this.videoRef.onloadedmetadata = () => {
           this.videoRef.play();
+          this.videoRef.volume = 0.0;
 
           this.faceCoverRef.setup(this.videoRef);
 
-          // TODO detect face with clmtracker, and to face mask
+          // https://github.com/cwilso/PitchDetect
 
-          // TODO setup audio filters
-          // const context = new AudioContext();
-          // const audioSource = context.createMediaElementSource(this.videoRef);
-          // const filter = context.createBiquadFilter();
-          // audioSource.connect(filter);
-          // filter.connect(context.destination);
+          const audioContext = new AudioContext();
+          const audioSource = audioContext.createMediaStreamSource(mediaStream);
 
-          // // Configure filter
-          // filter.type = "lowshelf";
-          // filter.frequency.value = 1000;
-          // filter.gain.value = 25;
+          this.voiceCover = new VoiceCover(
+            audioContext,
+            audioSource,
+            audioContext.destination,
+          );
         };
       })
       .catch((err) => {
@@ -83,13 +82,13 @@ export default class Index extends React.Component {
 
       <div>
         <div align="right">
-           <h3>MatchWithoutLimits</h3>
-           <p></p>
+          <h3>MatchWithoutLimits</h3>
         </div>
-         
+
         <video
           width="640"
           height="480"
+          muted
           ref={(ref) => {this.videoRef = ref; }}
           style={{
             opacity: this.state.showDebug ? 1.0 : 0.001,
