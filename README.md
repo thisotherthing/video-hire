@@ -1,6 +1,16 @@
-# Custom Express Server example
+# MatchWithoutLimits
+MatchWithoutLimits is a video interviewing platform where candidates face and voice are masked during the interview. This will allow the interviewers to understand the candidate's experience and abilities while eliminating their identity from the evaluation process.
 
-## How to use
+## How we built it
+React/Next.js : generate site, and help simplify some of our codebase
+clmtracker: provides real-time facial feature detection
+Three.js : to draw the face replacement
+Tone.js : Manipulate the pitch of the candidate's voice
+Socket.io: would be used to facilitate the client to client connection
+
+## Try it out
+match-without-limits.herokuapp.com
+
 
 ### Using `create-next-app`
 
