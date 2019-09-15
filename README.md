@@ -9,7 +9,7 @@ Tone.js : Manipulate the pitch of the candidate's voice
 Socket.io: would be used to facilitate the client to client connection
 
 ## Try it out
-match-without-limits.herokuapp.com
+https://match-without-limits.herokuapp.com
 
 
 ### Using `create-next-app`
