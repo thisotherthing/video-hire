@@ -11,7 +11,7 @@ const nextHandler = nextApp.getRequestHandler();
 const port = process.env.PORT || 3000;
 
 // fake DB
-const messages = []
+const messages = [];
 
 // socket.io server
 io.on("connection", socket => {
@@ -19,22 +19,22 @@ io.on("connection", socket => {
   socket.emit("message", "from server");
 
   socket.on("message", (data) => {
-    messages.push(data)
-  })
-})
+    messages.push(data);
+  });
+});
 
 nextApp.prepare().then(() => {
   app.get("/messages", (req, res) => {
-    res.json(messages)
-  })
+    res.json(messages);
+  });
 
   app.get("*", (req, res) => {
-    return nextHandler(req, res)
-  })
+    return nextHandler(req, res);
+  });
 
   server.listen(port, (err) => {
     if (err) throw err;
 
     console.log(`Listening on http://localhost:${port}`);
-  })
+  });
 });

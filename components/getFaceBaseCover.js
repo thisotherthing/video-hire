@@ -40,7 +40,7 @@ export default function getFaceBaseCover(
       defines: {
         MAP_NAME: "faceEarMap",
         SQUARE: true,
-      }
+      },
     });
 
     const mesh = new Mesh(
@@ -89,7 +89,7 @@ export default function getFaceBaseCover(
         SQUARE: true,
         SCALE: eyeScale,
         CENTER_POSITION: "leftEyeCenter",
-      }
+      },
     });
 
     const mesh = new Mesh(
@@ -140,7 +140,7 @@ export default function getFaceBaseCover(
         SQUARE: true,
         SCALE: eyeScale,
         CENTER_POSITION: "rightEyeCenter",
-      }
+      },
     });
 
     const mesh = new Mesh(

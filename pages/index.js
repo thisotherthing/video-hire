@@ -5,11 +5,11 @@ import VoiceCover from "../components/voiceCover";
 
 export default class Index extends React.Component {
   constructor() {
-    super()
+    super();
     this.state = {
       showDebug: false,
       // messages: 'MatchWithoutLimits',
-    }
+    };
   }
   handleMessage = (e) => {
     console.log(e);
